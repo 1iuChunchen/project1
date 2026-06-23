@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>常用终端命令行速查</title>
+  <style>
+    :root { --ink:#172027; --muted:#66717a; --paper:#f7f4ed; --card:#fffdf8; --line:#e4ddd0; --accent:#e85d3f; --accent-dark:#bd4029; --green:#3e7c64; --code:#202a30; }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; color:var(--ink); background:var(--paper); font-family:"PingFang SC","Microsoft YaHei",system-ui,sans-serif; }
+    .hero { padding:76px max(24px, calc((100vw - 1120px)/2)); background:var(--code); color:#fffdf8; position:relative; overflow:hidden; }
+    .hero::after { content:"git"; position:absolute; right:3%; bottom:-70px; font:900 260px/1 Georgia,serif; color:rgba(255,255,255,.045); pointer-events:none; }
+    .eyebrow { display:inline-flex; gap:8px; align-items:center; color:#ffb4a1; font-size:13px; letter-spacing:.12em; text-transform:uppercase; }
+    .dot { width:8px; height:8px; border-radius:50%; background:var(--accent); }
+    h1 { font-size:clamp(38px,6vw,68px); letter-spacing:-.06em; margin:16px 0 14px; line-height:1; }
+    .hero p { margin:0; max-width:630px; color:#c4ced1; line-height:1.8; font-size:16px; }
+    main { max-width:1120px; margin:0 auto; padding:36px 24px 72px; }
+    .tools { display:flex; gap:14px; justify-content:space-between; align-items:center; margin-bottom:28px; flex-wrap:wrap; }
+    .search { flex:1; min-width:220px; max-width:460px; position:relative; }
+    .search input { width:100%; border:1px solid var(--line); border-radius:12px; padding:13px 16px 13px 42px; background:var(--card); font:inherit; outline:none; transition:.2s; }
+    .search input:focus { border-color:var(--accent); box-shadow:0 0 0 4px rgba(232,93,63,.12); }
+    .search span { position:absolute; left:15px; top:11px; color:var(--muted); font-size:18px; }
+    .legend { color:var(--muted); font-size:13px; }
+    .legend b { color:var(--accent-dark); }
+    .quick { display:flex; gap:8px; overflow:auto; padding-bottom:8px; margin-bottom:28px; }
+    .quick a { white-space:nowrap; color:var(--ink); text-decoration:none; background:#ede7db; border-radius:999px; padding:8px 13px; font-size:13px; }
+    .quick a:hover { background:#dcd1c0; }
+    section { margin-top:44px; scroll-margin-top:20px; }
+    h2 { font-size:25px; margin:0 0 8px; letter-spacing:-.03em; }
+    .section-note { color:var(--muted); margin:0 0 18px; font-size:14px; }
+    .grid { display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:14px; }
+    .command { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:18px; transition:transform .2s, box-shadow .2s; }
+    .command:hover { transform:translateY(-2px); box-shadow:0 9px 24px rgba(48,39,27,.07); }
+    .command h3 { margin:0 0 7px; font-size:16px; }
+    .command p { min-height:38px; margin:0 0 13px; color:var(--muted); font-size:13px; line-height:1.55; }
+    .code-row { display:flex; align-items:center; gap:8px; background:var(--code); border-radius:8px; padding:9px 10px 9px 12px; }
+    code { color:#e8f0ed; overflow:auto; white-space:nowrap; font:12px ui-monospace,SFMono-Regular,Menlo,monospace; }
+    button { border:0; cursor:pointer; border-radius:6px; padding:5px 8px; flex:none; color:#fff; background:#48545b; font:12px inherit; }
+    button:hover { background:var(--accent); }
+    .warning { margin-top:42px; padding:22px 24px; border-left:4px solid var(--accent); background:#fff0e9; border-radius:0 12px 12px 0; }
+    .warning h2 { font-size:19px; margin-bottom:8px; }
+    .warning p { color:#714535; margin:0; font-size:14px; line-height:1.7; }
+    .warning code { color:#fff; background:#915641; border-radius:4px; padding:2px 5px; }
+    .empty { display:none; text-align:center; color:var(--muted); padding:30px; }
+    footer { text-align:center; color:#8b8984; font-size:12px; margin-top:44px; }
+    @media (max-width:700px) { .hero { padding-top:56px; padding-bottom:56px; } .grid { grid-template-columns:1fr; } .command p { min-height:auto; } }
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <div class="eyebrow"><i class="dot"></i> developer's field guide</div>
+    <h1>常用终端命令行</h1>
+    <p>一页收纳开发时高频使用的命令：文件、搜索、进程、网络、环境与 Git。点击指令右侧的「复制」，随用随查。</p>
+  </header>
+
+  <main>
+    <div class="tools">
+      <label class="search"><span>⌕</span><input id="search" type="search" placeholder="搜索操作、说明或指令，例如：撤销、分支、commit" /></label>
+      <div class="legend">共 <b id="count">52</b> 条常用指令</div>
+    </div>
+    <nav class="quick">
+      <a href="#files">文件与目录</a><a href="#searching">搜索与查看</a><a href="#system">进程与网络</a><a href="#env">环境与权限</a><a href="#start">Git：开始</a><a href="#branch">Git：分支</a><a href="#commit">Git：提交</a><a href="#undo">Git：撤销</a>
+    </nav>
+
+    <section id="files"><h2>文件与目录</h2><p class="section-note">在项目里移动、创建、复制与清理文件的基础动作。</p><div class="grid">
+      <article class="command"><h3>查看当前目录</h3><p>显示你当前所在的绝对路径。</p><div class="code-row"><code>pwd</code><button>复制</button></div></article>
+      <article class="command"><h3>列出文件详情</h3><p>显示隐藏文件、权限、大小与修改时间。</p><div class="code-row"><code>ls -la</code><button>复制</button></div></article>
+      <article class="command"><h3>进入目录</h3><p>使用 <code>..</code> 可返回上一级目录。</p><div class="code-row"><code>cd path/to/directory</code><button>复制</button></div></article>
+      <article class="command"><h3>创建目录</h3><p><code>-p</code> 会同时创建不存在的父目录。</p><div class="code-row"><code>mkdir -p src/components</code><button>复制</button></div></article>
+      <article class="command"><h3>创建空文件</h3><p>文件存在时会更新它的修改时间。</p><div class="code-row"><code>touch README.md</code><button>复制</button></div></article>
+      <article class="command"><h3>复制文件或目录</h3><p>复制目录时需要加 <code>-r</code>。</p><div class="code-row"><code>cp -r source-dir backup-dir</code><button>复制</button></div></article>
+      <article class="command"><h3>移动或重命名</h3><p>同一条命令可用于移动文件和修改文件名。</p><div class="code-row"><code>mv old-name new-name</code><button>复制</button></div></article>
+      <article class="command"><h3>删除文件</h3><p>删除目录请使用 <code>rm -r directory</code>，务必先确认路径。</p><div class="code-row"><code>rm filename</code><button>复制</button></div></article>
+    </div></section>
+
+    <section id="searching"><h2>搜索与查看</h2><p class="section-note">快速定位代码、查看内容，少在目录树里迷路。</p><div class="grid">
+      <article class="command"><h3>读取文件内容</h3><p>适合简短文本；大文件可配合 <code>less</code> 使用。</p><div class="code-row"><code>cat package.json</code><button>复制</button></div></article>
+      <article class="command"><h3>分页查看文件</h3><p>按 <code>q</code> 退出，输入 <code>/关键词</code> 可搜索。</p><div class="code-row"><code>less README.md</code><button>复制</button></div></article>
+      <article class="command"><h3>查看文件末尾日志</h3><p><code>-f</code> 会持续跟踪新增内容，常用于看日志。</p><div class="code-row"><code>tail -f app.log</code><button>复制</button></div></article>
+      <article class="command"><h3>搜索代码内容</h3><p>推荐使用 rg（ripgrep），速度快且默认忽略常见无关目录。</p><div class="code-row"><code>rg "TODO" src</code><button>复制</button></div></article>
+      <article class="command"><h3>按名称查找文件</h3><p>在当前目录递归寻找匹配的文件名。</p><div class="code-row"><code>find . -name "*.test.js"</code><button>复制</button></div></article>
+      <article class="command"><h3>查看磁盘空间</h3><p><code>-h</code> 用易读单位显示各磁盘使用情况。</p><div class="code-row"><code>df -h</code><button>复制</button></div></article>
+    </div></section>
+
+    <section id="system"><h2>进程与网络</h2><p class="section-note">排查端口占用、定位进程和测试服务连通性。</p><div class="grid">
+      <article class="command"><h3>查看指定端口占用</h3><p>找出正在监听 3000 端口的进程。</p><div class="code-row"><code>lsof -i :3000</code><button>复制</button></div></article>
+      <article class="command"><h3>结束进程</h3><p>先尝试普通结束；无响应时才使用 <code>-9</code>。</p><div class="code-row"><code>kill &lt;pid&gt;</code><button>复制</button></div></article>
+      <article class="command"><h3>按名称查找进程</h3><p>查找包含关键字的进程，例如 node 或 vite。</p><div class="code-row"><code>ps aux | rg node</code><button>复制</button></div></article>
+      <article class="command"><h3>测试 HTTP 响应</h3><p>仅显示响应头，适合检查接口状态码与重定向。</p><div class="code-row"><code>curl -I https://example.com</code><button>复制</button></div></article>
+      <article class="command"><h3>查看本机 IP</h3><p>macOS 上查看 Wi-Fi 网卡的本地 IPv4 地址。</p><div class="code-row"><code>ipconfig getifaddr en0</code><button>复制</button></div></article>
+      <article class="command"><h3>实时查看资源占用</h3><p>按 CPU、内存等指标查看正在运行的进程。</p><div class="code-row"><code>top</code><button>复制</button></div></article>
+    </div></section>
+
+    <section id="env"><h2>环境与权限</h2><p class="section-note">检查命令来源、管理环境变量，以及处理常见的权限问题。</p><div class="grid">
+      <article class="command"><h3>查看命令位置</h3><p>确认当前实际执行的是哪个版本的命令。</p><div class="code-row"><code>which node</code><button>复制</button></div></article>
+      <article class="command"><h3>查看环境变量</h3><p>读取一个环境变量的值。</p><div class="code-row"><code>echo $PATH</code><button>复制</button></div></article>
+      <article class="command"><h3>临时设置环境变量</h3><p>只在当前终端会话中生效。</p><div class="code-row"><code>export NODE_ENV=development</code><button>复制</button></div></article>
+      <article class="command"><h3>查看文件权限</h3><p>权限位如 <code>rwx</code> 分别对应读、写与执行。</p><div class="code-row"><code>ls -l script.sh</code><button>复制</button></div></article>
+      <article class="command"><h3>添加可执行权限</h3><p>让 Shell 脚本能够直接运行。</p><div class="code-row"><code>chmod +x script.sh</code><button>复制</button></div></article>
+      <article class="command"><h3>查看命令历史</h3><p>配合 <code>history | rg git</code> 可过滤历史记录。</p><div class="code-row"><code>history</code><button>复制</button></div></article>
+    </div></section>
+
+    <section class="git-intro"><h2>Git 版本控制</h2><p class="section-note">下面保留完整的 Git 日常操作速查，便于在同一页完成开发现场的大多数查询。</p></section>
+
+    <section id="start"><h2>开始与查看</h2><p class="section-note">先弄清当前状态，再开始操作，是很好的 Git 肌肉记忆。</p><div class="grid">
+      <article class="command"><h3>初始化仓库</h3><p>在当前项目目录创建一个新的 Git 仓库。</p><div class="code-row"><code>git init</code><button>复制</button></div></article>
+      <article class="command"><h3>查看工作区状态</h3><p>查看改动、暂存区状态和当前分支。</p><div class="code-row"><code>git status</code><button>复制</button></div></article>
+      <article class="command"><h3>查看改动内容</h3><p>显示尚未暂存的文件差异。</p><div class="code-row"><code>git diff</code><button>复制</button></div></article>
+      <article class="command"><h3>查看暂存区差异</h3><p>显示已 add、但还没提交的改动。</p><div class="code-row"><code>git diff --staged</code><button>复制</button></div></article>
+    </div></section>
+
+    <section id="branch"><h2>分支协作</h2><p class="section-note">让每个功能或修复在独立分支上生长。</p><div class="grid">
+      <article class="command"><h3>查看本地与远程分支</h3><p><code>-a</code> 会同时显示远程分支。</p><div class="code-row"><code>git branch -a</code><button>复制</button></div></article>
+      <article class="command"><h3>新建并切换分支</h3><p>从当前提交创建功能分支并立即进入。</p><div class="code-row"><code>git switch -c feature/login</code><button>复制</button></div></article>
+      <article class="command"><h3>切换已有分支</h3><p>切回主分支或任意本地已有分支。</p><div class="code-row"><code>git switch main</code><button>复制</button></div></article>
+      <article class="command"><h3>合并一个分支</h3><p>先切到接收改动的分支，再执行合并。</p><div class="code-row"><code>git merge feature/login</code><button>复制</button></div></article>
+      <article class="command"><h3>删除已合并分支</h3><p>安全删除本地已合并的分支。</p><div class="code-row"><code>git branch -d feature/login</code><button>复制</button></div></article>
+      <article class="command"><h3>更新远程分支信息</h3><p>获取远程最新引用，并清理已删除的远程分支。</p><div class="code-row"><code>git fetch --prune</code><button>复制</button></div></article>
+    </div></section>
+
+    <section id="commit"><h2>提交与同步</h2><p class="section-note">小而完整的提交，未来的你会感谢现在的你。</p><div class="grid">
+      <article class="command"><h3>暂存指定文件</h3><p>把一个文件的改动加入下一次提交。</p><div class="code-row"><code>git add src/app.js</code><button>复制</button></div></article>
+      <article class="command"><h3>暂存全部改动</h3><p>将当前目录下的新建、修改、删除全部加入暂存区。</p><div class="code-row"><code>git add .</code><button>复制</button></div></article>
+      <article class="command"><h3>创建提交</h3><p>写一条清晰说明本次改动意图的提交信息。</p><div class="code-row"><code>git commit -m "feat: add login page"</code><button>复制</button></div></article>
+      <article class="command"><h3>修改最近一次提交</h3><p>补充漏掉的改动，或修改最近一次提交说明。</p><div class="code-row"><code>git commit --amend</code><button>复制</button></div></article>
+      <article class="command"><h3>拉取并合并远程改动</h3><p>获取远程更新并合并到当前分支。</p><div class="code-row"><code>git pull origin main</code><button>复制</button></div></article>
+      <article class="command"><h3>推送当前分支</h3><p>首次推送用 <code>-u</code> 建立追踪关系。</p><div class="code-row"><code>git push -u origin feature/login</code><button>复制</button></div></article>
+    </div></section>
+
+    <section id="undo"><h2>撤销与救援</h2><p class="section-note">动手前先确认范围；这里的几条是开发现场的“后悔药”。</p><div class="grid">
+      <article class="command"><h3>取消暂存文件</h3><p>保留工作区内容，只把文件移出暂存区。</p><div class="code-row"><code>git restore --staged src/app.js</code><button>复制</button></div></article>
+      <article class="command"><h3>丢弃未暂存的文件改动</h3><p>将文件恢复为最近一次提交的版本。</p><div class="code-row"><code>git restore src/app.js</code><button>复制</button></div></article>
+      <article class="command"><h3>反做一个提交</h3><p>生成一个新提交来撤销指定提交，适合已推送的历史。</p><div class="code-row"><code>git revert &lt;commit-id&gt;</code><button>复制</button></div></article>
+      <article class="command"><h3>找回误操作前的提交</h3><p>查看 HEAD 移动记录，找回 reset、rebase 前的提交。</p><div class="code-row"><code>git reflog</code><button>复制</button></div></article>
+    </div></section>
+
+    <section id="stash"><h2>暂存工作</h2><p class="section-note">临时切去修一个紧急问题，未完成工作也能妥善收好。</p><div class="grid">
+      <article class="command"><h3>临时保存当前改动</h3><p>保存已跟踪文件的改动；<code>-u</code> 同时包含未跟踪文件。</p><div class="code-row"><code>git stash -u</code><button>复制</button></div></article>
+      <article class="command"><h3>查看暂存列表</h3><p>列出所有暂存起来的工作现场。</p><div class="code-row"><code>git stash list</code><button>复制</button></div></article>
+      <article class="command"><h3>恢复最近的暂存</h3><p>恢复并删除最近一份 stash。</p><div class="code-row"><code>git stash pop</code><button>复制</button></div></article>
+    </div></section>
+
+    <section id="tag"><h2>标签与日志</h2><p class="section-note">给版本落点命名，也给历史留下一张清晰的地图。</p><div class="grid">
+      <article class="command"><h3>简洁查看提交历史</h3><p>以单行图形方式查看分支和提交关系。</p><div class="code-row"><code>git log --oneline --graph --all</code><button>复制</button></div></article>
+      <article class="command"><h3>创建附注标签</h3><p>通常用于发布版本，例如 v1.0.0。</p><div class="code-row"><code>git tag -a v1.0.0 -m "release v1.0.0"</code><button>复制</button></div></article>
+      <article class="command"><h3>推送标签</h3><p>将单个标签同步到远程仓库。</p><div class="code-row"><code>git push origin v1.0.0</code><button>复制</button></div></article>
+    </div></section>
+
+    <p class="empty" id="empty">没有找到匹配的指令，换个关键词试试？</p>
+    <aside class="warning"><h2>⚠️ 需要格外小心的操作</h2><p><code>rm</code> 会直接删除文件；<code>git restore</code> 会丢弃未提交的改动；<code>git push --force</code> 会重写远程历史。执行前请确认路径或分支，备份重要工作，并优先使用 <code>--force-with-lease</code>。</p></aside>
+    <footer>Terminal & Git Cheat Sheet · 为日常开发而做</footer>
+  </main>
+  <script>
+    const cards = [...document.querySelectorAll('.command')];
+    const search = document.querySelector('#search');
+    const count = document.querySelector('#count');
+    const empty = document.querySelector('#empty');
+    document.querySelectorAll('button').forEach(button => button.addEventListener('click', async () => {
+      const command = button.previousElementSibling.textContent;
+      await navigator.clipboard.writeText(command);
+      button.textContent = '已复制';
+      setTimeout(() => button.textContent = '复制', 1200);
+    }));
+    search.addEventListener('input', () => {
+      const keyword = search.value.trim().toLowerCase(); let visible = 0;
+      cards.forEach(card => { const show = card.textContent.toLowerCase().includes(keyword); card.style.display = show ? '' : 'none'; if (show) visible++; });
+      document.querySelectorAll('section').forEach(s => s.style.display = [...s.querySelectorAll('.command')].some(c => c.style.display !== 'none') ? '' : 'none');
+      count.textContent = visible; empty.style.display = visible ? 'none' : 'block';
+    });
+  </script>
+</body>
+</html>
